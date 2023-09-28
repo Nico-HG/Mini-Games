@@ -9,11 +9,8 @@ const gamble = (wagerAmount) => {
   let multiplier;
   const count = Math.ceil((Math.random() * 7));
   switch (count) {
-    case 1: case 2: case 3: case 4:
+    case 1: case 2: case 3: case 4: case 5:
       multiplier = 0;
-      break;
-    case 5:
-      multiplier = 1.5;
       break;
     case 6:
       multiplier = 2;

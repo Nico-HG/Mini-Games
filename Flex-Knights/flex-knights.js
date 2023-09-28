@@ -222,7 +222,7 @@ const playRound = enemy => {
 const pickUpgrade = () => {
   let choice;
   do {
-    choice = rlSync.question('Pick your upgrade: \nRegen max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n');
+    choice = rlSync.question('Pick your upgrade: \nRegen max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n1');
   } while (choice !== '1' && choice !== '2' && choice !== '3');
   switch (choice) {
     case '1': player.health = player.startHealth;
