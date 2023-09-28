@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-tB;
 
 const gameOptionSize = 6;
 let gameDifficulty;
