@@ -1,0 +1,24 @@
+{
+  "name": "mini-games",
+  "version": "1.0.0",
+  "description": "Mini games.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nico-HG/Mini-Games.git"
+  },
+  "author": "Nico",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nico-HG/Mini-Games/issues"
+  },
+  "homepage": "https://github.com/Nico-HG/Mini-Games#readme",
+  "dependencies": {
+    "@inquirer/prompts": "^1.1.3",
+    "inquirer": "^9.2.3"
+  }
+}
