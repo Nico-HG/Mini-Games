@@ -13,7 +13,7 @@ const gamble = (wagerAmount) => {
       multiplier = 0;
       break;
     case 6:
-      multiplier = 2;
+      multiplier = 1.5;
       break;
     case 7:
       multiplier = 4;
@@ -27,7 +27,6 @@ const playerWager = () => {
   let wager;
   do {
     wager = Rlsync.question(`$${balance} in funds. Place your bet! \n┏━━━✦❘༻༺❘✦━━━┓━━━✦❘༻༺❘✦━━━┓\n`);
-  // eslint-disable-next-line no-restricted-globals
   } while (isNaN(wager) || wager > balance || wager < 1);
   balance -= wager;
   const gambleReturn = gamble(wager);
@@ -46,7 +45,6 @@ const playGame = () => {
     return;
   }
   const balanceWithTag = playerWager();
-  // eslint-disable-next-line radix
   balance = parseInt(balanceWithTag);
   if (balanceWithTag[balanceWithTag.length - 1] === '+') {
     console.log('===============WINNNNNNNNNNNNN=================\n$$$$$$(^o^)~≪☆*CONGRATULATIONS*☆≫~(^o^)／$$$$$$\n');
@@ -57,7 +55,7 @@ const playGame = () => {
     repeatGameOrNot = Rlsync.question(`New balance is $${balance}\nWould you like to keep playing? Press enter\nIf not please type in caps 'EXIT CASINO AND STOP PLAYING AND HAVING FUN'\n`);
   } while (repeatGameOrNot !== '' && repeatGameOrNot !== 'EXIT CASINO AND STOP PLAYING AND HAVING FUN');
 
-  console.log(`Your final balance is $${balance}! Be sure to play again!`);
+  repeatGameOrNot ? console.log(`Your final balance is $${balance}! Be sure to play again!`) : playGame();
 };
 
 playGame();
