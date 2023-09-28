@@ -27,6 +27,7 @@ const playerWager = () => {
   let wager;
   do {
     wager = Rlsync.question(`$${balance} in funds. Place your bet! \n┏━━━✦❘༻༺❘✦━━━┓━━━✦❘༻༺❘✦━━━┓\n`);
+  // eslint-disable-next-line no-restricted-globals
   } while (isNaN(wager) || wager > balance || wager < 1);
   balance -= wager;
   const gambleReturn = gamble(wager);
@@ -45,6 +46,7 @@ const playGame = () => {
     return;
   }
   const balanceWithTag = playerWager();
+  // eslint-disable-next-line radix
   balance = parseInt(balanceWithTag);
   if (balanceWithTag[balanceWithTag.length - 1] === '+') {
     console.log('===============WINNNNNNNNNNNNN=================\n$$$$$$(^o^)~≪☆*CONGRATULATIONS*☆≫~(^o^)／$$$$$$\n');

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 // eslint-disable-next-line import/no-extraneous-dependencies
+import rlSync from 'readline-sync';
 
 const gameOptionSize = 6;
 let gameDifficulty;
