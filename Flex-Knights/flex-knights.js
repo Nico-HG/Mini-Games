@@ -9,7 +9,7 @@ import inquirer from 'inquirer'
 const game = {};
 game.continue = true; 
 
-//factory function for every characther
+//factory function for every characther (I CANT FUCKING SPELL ITS WRONG I CAN SEE IT)
 function Char(name, graphic, startHealth, health, attack, maxFlex, parryChance) {
   this.attackLog = '';
   this.move = '';
@@ -37,15 +37,15 @@ goblinrager.movePick = () => {
 };
 const level3 = new Char('TESTTTTT', '--)<(^_^<)', 18, 18, 4, 2, 0.4);
 level3.movePick = classicMove
-const level4 = new Char('Sir GatesWorth', 'GRAPHIC', 18, 18, 4, 2, 0.4);
+const level4 = new Char('Sir SLATT', 'GRAPHIC', 18, 18, 4, 2, 0.4);
 level4.movePick = classicMove
-const level5 = new Char('Sir BezForth', 'GRAPHIC', 20, 20, 4, 2, 0.5);
+const level5 = new Char('Sir POPPAA', 'GRAPHIC', 20, 20, 4, 2, 0.5);
 level5.movePick = classicMove
-const level6 = new Char('Sir Jobs', 'GRAPHIC', 24, 24, 5, 2, 0.5);
+const level6 = new Char('Sir MAGAZINEE', 'GRAPHIC', 24, 24, 5, 2, 0.5);
 level6.movePick = classicMove
-const level7 = new Char('Sir Zuckerforth', 'GRAPHIC', 24, 24, 4, 3, 0.6);
+const level7 = new Char('Sir RALPHY', 'GRAPHIC', 24, 24, 4, 3, 0.6);
 level7.movePick = classicMove
-const level8 = new Char('Lord Shannonhof', 'GRAPHIC', 24, 24, 5, 3, 0.8);
+const level8 = new Char('Lord LORDINGTON', 'GRAPHIC', 26, 26, 5, 3, 0.8);
 level8.movePick = classicMove
 
 
@@ -105,11 +105,8 @@ const getMoveEnemy = char => {
     char.attackLog = `${char.name} picked ${char.move}`;
   }
 };
-const chance = (num) => {
-  if (Math.random() <= num) {
-    return true;
-  } return false;
-};
+const chance = num => Math.random() <= num ? true : false;
+
 // Get the game info the player needs and logs it
 const logYourStats = (char) => {
   console.log(`${char.name} ${char.graphic} stats:\nhealth: ${char.health}, attack: ${char.attack}, flex: ${char.maxFlex} parry chance: ${char.parryChance.toFixed(2)}`);
@@ -222,7 +219,7 @@ const playRound = enemy => {
 const pickUpgrade = () => {
   let choice;
   do {
-    choice = rlSync.question('Pick your upgrade: \nRegen max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n1');
+    choice = rlSync.question('Pick your upgrade: \nRegen max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n');
   } while (choice !== '1' && choice !== '2' && choice !== '3');
   switch (choice) {
     case '1': player.health = player.startHealth;
