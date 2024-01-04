@@ -7,7 +7,8 @@ import rlSync from 'readline-sync'
 import inquirer from 'inquirer'
 
 const game = {};
-game.continue = true; 
+game.continue = true;
+game.doubleScreen = 0; 
 
 //factory function for every characther (I CANT FUCKING SPELL ITS WRONG I CAN SEE IT)
 function Char(name, graphic, startHealth, health, attack, maxFlex, parryChance) {
@@ -37,13 +38,13 @@ goblinrager.movePick = () => {
 };
 const level3 = new Char('TESTTTTT', '--)<(^_^<)', 18, 18, 4, 2, 0.4);
 level3.movePick = classicMove
-const level4 = new Char('Sir SLATT', 'GRAPHIC', 18, 18, 4, 2, 0.4);
+const level4 = new Char('Sir SLATT', 'GRAPHIC', 18, 18, 4, 2, 0.5);
 level4.movePick = classicMove
-const level5 = new Char('Sir POPPAA', 'GRAPHIC', 20, 20, 4, 2, 0.5);
+const level5 = new Char('Sir POPPAA', 'GRAPHIC', 20, 20, 4, 2, 0.6);
 level5.movePick = classicMove
-const level6 = new Char('Sir MAGAZINEE', 'GRAPHIC', 24, 24, 5, 2, 0.5);
+const level6 = new Char('Sir MAGAZINEE', 'GRAPHIC', 24, 24, 5, 2, 0.7);
 level6.movePick = classicMove
-const level7 = new Char('Sir RALPHY', 'GRAPHIC', 24, 24, 4, 3, 0.6);
+const level7 = new Char('Sir RALPHY', 'GRAPHIC', 24, 24, 4, 3, 0.75);
 level7.movePick = classicMove
 const level8 = new Char('Lord LORDINGTON', 'GRAPHIC', 26, 26, 5, 3, 0.8);
 level8.movePick = classicMove
@@ -79,8 +80,8 @@ function basicmove(input){
   }
 };
 function classicMove() {
-  if (player.pauseparry === 1) return 'attack'
-  if (player.pauseflex === 1) return 'parry'
+  if (player.pauseparry === 1) return 'attack';
+  if (player.pauseflex === 1) return 'parry';
   else {
     return basicmove(Math.ceil(Math.random() * 3));
   }
@@ -88,7 +89,7 @@ function classicMove() {
 const playerMovePick = () => {
   let move;
   do {
-    move = rlSync.question('Type number to (1)attack (2)parry or (3)flex?\n');
+    move = rlSync.question('Type number to: \nAttack (1) \nparry (2) \nflex (3)\n');
   } while (move !== '1' && move !== '2' && move !== '3');
   return basicmove(move);
 };
@@ -96,6 +97,9 @@ const getMovePlayer = char => {
   if (char.pauseflex !== 1 && char.pauseparry !== 1) {
     char.move = playerMovePick();
     char.attackLog = `${char.name} picked ${char.move}`;
+  } else {
+    game.doubleScreen = 2;
+    char.attackLog = `...`;
   }
 };
 const getMoveEnemy = char => {
@@ -103,6 +107,8 @@ const getMoveEnemy = char => {
     // right now its basic enemy move but we change this to allow for more tpyes of move picks
     char.move = char.movePick();
     char.attackLog = `${char.name} picked ${char.move}`;
+  } else {
+    char.attackLog = `...`;
   }
 };
 const chance = num => Math.random() <= num ? true : false;
@@ -112,7 +118,7 @@ const logYourStats = (char) => {
   console.log(`${char.name} ${char.graphic} stats:\nhealth: ${char.health}, attack: ${char.attack}, flex: ${char.maxFlex} parry chance: ${char.parryChance.toFixed(2)}`);
   if (char.pauseparry === 1) console.log('**STUNNED FROM PARRY**');
   if (char.pauseflex === 1) console.log('**FLEXING MUSCLES!!**');
-};
+}; 
 const logLine = (num) => {
   for (let i = num; i > 0; i -= 1) {
     console.log('=================================================================');
@@ -157,15 +163,18 @@ const resetStats = (enemy) => {
   toZeroPauseParry(player);
   toZeroPauseFlex(enemy);
   toZeroPauseParry(enemy);
+  if (game.doubleScreen > 0) game.doubleScreen -= 1;
+};
+const resetLogs = (enemy) => {
   resetAttackLog(player);
   resetAttackLog(enemy);
-};
+}
 
 //different outcomes for game options
 const flexAttackCheck = char => {
   if (char.pauseflex === 1) {
     char.flex = char.maxFlex;
-    char.attackLog = 'FLEX attack';
+    char.attackLog = 'FLEX ATTACK';
     char.move = 'attack';
   } else if (char.move === 'flex' && char.pauseflex === 0) {
     char.pauseflex = 2;
@@ -175,7 +184,7 @@ const parryCheck = (char, enemy) => {
   const parry = chance(char.parryChance);
   if ((char.move === 'parry' && enemy.move === 'attack') && parry) {
     enemy.pauseparry = 2;
-    enemy.move = 'unset';
+    enemy.move = '';
     char.attackLog += ' (succesful)';
   // eslint-disable-next-line no-dupe-else-if
   } else if ((char.move === 'parry' && enemy.move === 'attack') && !parry) {
@@ -184,28 +193,23 @@ const parryCheck = (char, enemy) => {
 };
 const attackSim = (player, enemy) => {
   if (player.move === 'attack') enemy.health -= (player.attack * player.flex);
-  if (enemy.health <= 0) {
-    enemy.attackLog = 'RIP';
-    logAttacks(enemy);
-    gameRoundWinScreen();
-    resetStats(enemy);
-    return;
-  }
+  if (enemy.health <= 0) enemy.move = '';
+
   if (enemy.move === 'attack') player.health -= (enemy.attack * enemy.flex);
-  if (player.health <= 0) {
-    logAttacks(enemy);
-    resetStats(enemy);
-    gameOverScreen();
-    return;
-  }
-  logAttacks(enemy);
+  
   resetStats(enemy);
   // THIS CAN BE REWRITTEN TO AVOID THIS ISSUE
   // eslint-disable-next-line no-use-before-define
-  playRound(enemy);
+
 };
 //different game functions 
 const playRound = enemy => {
+
+  if (game.doubleScreen !== 1) {
+    console.clear();
+  } 
+ 
+  logAttacks(enemy);
   gameStateLog(enemy);
   getMovePlayer(player);
   getMoveEnemy(enemy);
@@ -219,7 +223,7 @@ const playRound = enemy => {
 const pickUpgrade = () => {
   let choice;
   do {
-    choice = rlSync.question('Pick your upgrade: \nRegen max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n');
+    choice = rlSync.question('Pick your upgrade: \nRegen to max health (1)\n+1 attack (2)\n+0.05 parry chance (3)\n');
   } while (choice !== '1' && choice !== '2' && choice !== '3');
   switch (choice) {
     case '1': player.health = player.startHealth;
@@ -234,33 +238,65 @@ const pickUpgrade = () => {
 const levelUp = () => {
   pickUpgrade();
 };
+
+function playNewEnemy(enemy) {
+  player.attackLog = `You prepare for a new foe`;  
+  do {
+    playRound(enemy);
+  } while (enemy.health > 0 && player.health > 0);
+  if (enemy.health <= 0) enemyDeath(enemy);
+  if (player.health <= 0) playerDeath(enemy);
+}
+
+function enemyDeath(enemy) {
+  enemy.attackLog = 'RIP';
+  logAttacks(enemy);
+  gameRoundWinScreen();
+  resetStats(enemy);
+}
+function playerDeath(enemy) {
+  logAttacks(enemy);
+  resetStats(enemy);
+  gameOverScreen();
+}
+
 //game
 const play = () => {
   pickPlayerName();
-  playRound(goblin);
+
+  playNewEnemy(goblin);
   if (!game.continue) return;
   levelUp();
-  playRound(goblinrager);
+
+  playNewEnemy(goblinrager);
   if (!game.continue) return;
   levelUp();
-  playRound(level3);
+
+  playNewEnemy(level3);
   if (!game.continue) return;
   levelUp();
-  playRound(level4);
+  
+  playNewEnemy(level4);
   if (!game.continue) return;
   levelUp();
-  playRound(level5);
+
+  playNewEnemy(level5);
   if (!game.continue) return;
   levelUp();
-  playRound(level6);
+
+  playNewEnemy(level6);
   if (!game.continue) return;
   levelUp();
-  playRound(level7);
+
+  playNewEnemy(level7);
   if (!game.continue) return;
   levelUp();
-  playRound(level8);
+  
+  playNewEnemy(level8);
   if (!game.continue) return;
   levelUp();
 };
 
 play();
+
+
